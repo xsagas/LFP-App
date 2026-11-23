@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-labelledby="title desc">
+  <title id="title">LFP App</title>
+  <desc id="desc">Icono de lista de precios</desc>
+  <rect width="512" height="512" rx="108" fill="#03045e"/>
+  <g fill="#ffffff">
+    <rect x="128" y="128" width="256" height="40" rx="20"/>
+    <rect x="128" y="236" width="256" height="40" rx="20"/>
+    <rect x="128" y="344" width="176" height="40" rx="20"/>
+  </g>
+  <circle cx="352" cy="364" r="44" fill="#ffffff" fill-opacity="0.18"/>
+  <text x="352" y="376" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="44" font-weight="700" fill="#ffffff">$</text>
+</svg>
