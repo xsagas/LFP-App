@@ -1,0 +1,198 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>LFP App</title>
+  <meta name="description" content="LFP App: lista de precios de impresoras Epson SureColor y sus tintas. Precios en Usd y Cop, sin IVA." />
+  <meta name="color-scheme" content="light">
+  <meta name="theme-color" content="#03045e">
+  <meta name="application-name" content="LFP App">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="Precios">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icons/icon.svg" type="image/svg+xml">
+  <link rel="icon" href="icons/icon-192.png" type="image/png" sizes="192x192">
+  <link rel="apple-touch-icon" href="icons/icon-192.png">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <a class="skip-link" href="#stage-scroll">Saltar al contenido</a>
+  <div class="app">
+    <header class="navbar">
+      <div class="currency-toggle" role="group" aria-label="Moneda">
+        <button type="button" class="currency-label" data-currency="USD" aria-pressed="false">Usd</button>
+        <button type="button" class="currency-switch" id="currency-toggle" role="switch" aria-checked="false" aria-label="Moneda"></button>
+        <button type="button" class="currency-label" data-currency="COP" aria-pressed="false">Cop</button>
+      </div>
+      <a class="nav-title" href="#inicio">LFP App</a>
+      <button type="button" class="menu-btn" id="menu-btn" aria-expanded="false" aria-controls="picker">
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+        <span>Menú</span>
+      </button>
+    </header>
+
+    <div class="scrim" id="scrim" hidden></div>
+
+    <div class="workspace">
+      <aside class="picker" id="picker" aria-label="Productos">
+        <div class="picker-head">
+          <div class="picker-top">
+            <p class="super">Listado de Impresoras</p>
+            <div class="picker-actions">
+              <button type="button" class="picker-settings" id="trm-open-btn" aria-label="Configurar TRM">
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+                  <path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.38a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/>
+                  <circle cx="12" cy="12" r="3"/>
+                </svg>
+              </button>
+              <button type="button" class="picker-close" id="menu-close" aria-label="Cerrar menú">&times;</button>
+            </div>
+          </div>
+          <div class="search">
+            <label class="sr-only" for="q">Buscar modelo</label>
+            <input id="q" class="search-input" type="search" placeholder="Buscar modelo…" autocomplete="off" spellcheck="false" />
+            <button type="button" class="search-clear" id="search-clear" aria-label="Limpiar búsqueda" hidden>&times;</button>
+          </div>
+          <div class="category-filters" id="category-filters" role="group" aria-label="Filtrar por categoría"></div>
+          <p class="sr-only" id="search-count" role="status"></p>
+        </div>
+        <nav class="picker-list" id="buttons" aria-label="Modelos">
+          <p class="search-empty" id="search-empty" hidden></p>
+        </nav>
+      </aside>
+
+      <main class="stage">
+        <noscript><p class="noscript">Esta lista necesita JavaScript activado para mostrar los precios. Actívalo y recarga la página.</p></noscript>
+        <div class="product-scroll" id="stage-scroll" tabindex="-1"></div>
+      </main>
+    </div>
+  </div>
+
+  <!-- Modal TRM -->
+  <div id="trm-modal" class="modal" role="dialog" aria-modal="true" aria-labelledby="trm-modal-title" aria-describedby="trm-modal-desc" hidden>
+    <div class="modal-scrim" id="trm-scrim"></div>
+    <div class="modal-dialog" role="document">
+      <header class="modal-head">
+        <h2 id="trm-modal-title" class="modal-title">Configurar TRM Usd / Cop</h2>
+        <button type="button" class="modal-close" id="trm-close" aria-label="Cerrar">&times;</button>
+      </header>
+      <div class="modal-body">
+        <p class="modal-text" id="trm-modal-desc">Ingresa la TRM actual para convertir los valores a pesos colombianos.</p>
+        <label class="trm-field">
+          <span>1 Usd =</span>
+          <input id="trm-input" class="trm-input" type="text" inputmode="decimal" autocomplete="off" placeholder="Ej. 4000,00" aria-describedby="trm-modal-hint trm-error" />
+          <span>Cop</span>
+        </label>
+        <p class="modal-hint" id="trm-modal-hint">Esta tasa se guardará en este dispositivo.</p>
+        <p class="trm-error" id="trm-error" role="alert" hidden></p>
+      </div>
+      <footer class="modal-foot">
+        <button type="button" class="modal-btn modal-btn-ghost" id="trm-cancel">Cancelar</button>
+        <button type="button" class="modal-btn modal-btn-primary" id="trm-save">Aplicar</button>
+      </footer>
+    </div>
+  </div>
+
+  <!-- Modal editar precios -->
+  <div id="edit-modal" class="modal" role="dialog" aria-modal="true" aria-labelledby="edit-modal-title" aria-describedby="edit-modal-desc" hidden>
+    <div class="modal-scrim" id="edit-scrim"></div>
+    <div class="modal-dialog wide" role="document">
+      <header class="modal-head">
+        <h2 id="edit-modal-title" class="modal-title">Editar precios</h2>
+        <button type="button" class="modal-close" id="edit-close" aria-label="Cerrar">&times;</button>
+      </header>
+      <div class="modal-body">
+        <p class="modal-text" id="edit-modal-desc">Los cambios se guardan solo en este dispositivo.</p>
+        <div id="edit-fields"></div>
+        <p class="modal-hint" id="edit-trm-hint" hidden></p>
+        <p class="trm-error" id="edit-error" role="alert" hidden></p>
+      </div>
+      <footer class="modal-foot">
+        <button type="button" class="modal-btn modal-btn-ghost" id="edit-restore" hidden>Restaurar valores</button>
+        <button type="button" class="modal-btn modal-btn-ghost" id="edit-cancel">Cancelar</button>
+        <button type="button" class="modal-btn modal-btn-primary" id="edit-save">Guardar</button>
+      </footer>
+    </div>
+  </div>
+
+  <!-- Modal editar margen / PVP -->
+  <div id="variant-pricing-modal" class="modal modal-nested" role="dialog" aria-modal="true" aria-labelledby="variant-pricing-title" aria-describedby="variant-pricing-desc" hidden>
+    <div class="modal-scrim" id="variant-pricing-scrim"></div>
+    <div class="modal-dialog" role="document">
+      <header class="modal-head">
+        <h2 id="variant-pricing-title" class="modal-title">Editar precio</h2>
+        <button type="button" class="modal-close" id="variant-pricing-close" aria-label="Cerrar">&times;</button>
+      </header>
+      <div class="modal-body">
+        <p class="modal-text" id="variant-pricing-desc">El canal no se puede editar. Ajusta margen o PVP.</p>
+        <div class="edit-group">
+          <div class="edit-field">
+            <label class="edit-label" for="variant-pricing-canal">Canal (Usd)</label>
+            <div class="edit-control">
+              <input id="variant-pricing-canal" class="edit-input" type="text" readonly aria-readonly="true" />
+              <span class="edit-suffix">Usd</span>
+            </div>
+          </div>
+          <div class="edit-field">
+            <label class="edit-label" for="variant-pricing-margin">Margen (%)</label>
+            <div class="edit-control">
+              <input id="variant-pricing-margin" class="edit-input" type="text" inputmode="decimal" autocomplete="off" aria-describedby="variant-pricing-error" />
+              <span class="edit-suffix">%</span>
+            </div>
+          </div>
+          <div class="edit-field">
+            <label class="edit-label" for="variant-pricing-pvp">PVP</label>
+            <div class="edit-control">
+              <input id="variant-pricing-pvp" class="edit-input" type="text" inputmode="decimal" autocomplete="off" aria-describedby="variant-pricing-preview variant-pricing-error" />
+              <span class="edit-suffix" id="variant-pricing-pvp-suffix">USD</span>
+            </div>
+            <p class="edit-preview" id="variant-pricing-preview"></p>
+          </div>
+        </div>
+        <p class="trm-error" id="variant-pricing-error" role="alert" hidden></p>
+      </div>
+      <footer class="modal-foot">
+        <button type="button" class="modal-btn modal-btn-ghost" id="variant-pricing-cancel">Cancelar</button>
+        <button type="button" class="modal-btn modal-btn-primary" id="variant-pricing-apply">Aplicar</button>
+      </footer>
+    </div>
+  </div>
+
+  <!-- Modal lista de tintas / SKU -->
+  <div id="ink-list-modal" class="modal" role="dialog" aria-modal="true" aria-labelledby="ink-list-title" aria-describedby="ink-list-desc" hidden>
+    <div class="modal-scrim" id="ink-list-scrim"></div>
+    <div class="modal-dialog wide" role="document">
+      <header class="modal-head">
+        <h2 id="ink-list-title" class="modal-title">Tintas y SKU</h2>
+        <button type="button" class="modal-close" id="ink-list-close" aria-label="Cerrar">&times;</button>
+      </header>
+      <div class="modal-body">
+        <p class="modal-text" id="ink-list-desc">Lista de tintas disponibles y su SKU.</p>
+        <div class="chip-row" id="ink-sku-tags" role="group" aria-label="Filtrar por capacidad" hidden></div>
+        <div id="ink-list-content"></div>
+      </div>
+      <footer class="modal-foot">
+        <button type="button" class="modal-btn modal-btn-primary" id="ink-list-done">Cerrar</button>
+      </footer>
+    </div>
+  </div>
+
+  <div id="update-toast" class="update-toast" role="status" aria-live="polite" hidden>
+    <p>Nueva versión disponible.</p>
+    <div class="update-toast-actions">
+      <button type="button" class="modal-btn modal-btn-ghost" id="update-dismiss">Después</button>
+      <button type="button" class="modal-btn modal-btn-primary" id="update-apply">Actualizar</button>
+    </div>
+  </div>
+
+
+  <script src="model.js"></script>
+  <script src="data.js"></script>
+  <script src="colors.js"></script>
+  <script src="sustratos.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,26 @@
+# IDE
+.vscode/
+.idea/
+*.suo
+*.sln
+
+# OS
+Thumbs.db
+.DS_Store
+
+# Temporary
+*.log
+*.tmp
+
+# Node / build
+node_modules/
+dist/
+build/
+
+# Playwright
+.playwright-cli/
+test-results/
+playwright-report/
+
+# Local server
+*.web
