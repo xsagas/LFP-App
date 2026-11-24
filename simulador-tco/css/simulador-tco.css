@@ -54,16 +54,30 @@
   .ct-tco-table th{font-size:11px;letter-spacing:.02em}
 }
 .ct-tco-payback.d-none{display:none}
-.ct-tco-payback-controls{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin-bottom:12px}
-.ct-tco-payback-field{display:grid;gap:4px}
-.ct-tco-input-group{display:flex;gap:6px;align-items:stretch}
-.ct-tco-input-group .ct-tco-control{flex:1;min-width:0}
-.ct-tco-payback-kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:12px}
-@media(max-width:900px){.ct-tco-payback-kpis{grid-template-columns:repeat(2,1fr)}}
-@media(max-width:500px){.ct-tco-payback-kpis{grid-template-columns:1fr}}
-.ct-tco-mini-kpi{border:1px solid var(--ct-line);border-radius:10px;padding:10px;background:var(--ct-bg)}
-.ct-tco-mini-label{font-size:12px;color:var(--ct-muted);margin-bottom:4px}
-.ct-tco-mini-value{font-size:16px;font-weight:700;color:var(--ct-ink)}
+/* Los dos campos de entrada (Margen y Tasa) van siempre en una sola fila. */
+.ct-tco-payback-controls{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-bottom:12px}
+.ct-tco-payback-field{display:grid;grid-template-rows:1fr auto;gap:4px;min-width:0}
+.ct-tco-payback-field .ct-tco-label{align-self:end}
+.ct-tco-input-group{display:flex;gap:6px;align-items:stretch;min-width:0}
+.ct-tco-input-group .ct-tco-control{flex:1;min-width:0;padding-left:8px;padding-right:8px}
+@media(max-width:420px){
+  .ct-tco-payback-controls{gap:8px}
+  .ct-tco-input-group{gap:4px}
+  .ct-tco-input-group .ct-tco-btn-icon{min-width:32px;padding:8px 6px}
+}
+@media(max-width:360px){
+  .ct-tco-input-group .ct-tco-btn-icon{min-width:28px;padding:8px 4px}
+  .ct-tco-input-group .ct-tco-control{padding-left:6px;padding-right:6px}
+}
+/* KPIs del payback en 2x2 (dos columnas, dos filas) en todos los tamaños. */
+.ct-tco-payback-kpis{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-bottom:12px}
+.ct-tco-mini-kpi{border:1px solid var(--ct-line);border-radius:10px;padding:10px;background:var(--ct-bg);min-width:0}
+.ct-tco-mini-label{font-size:12px;color:var(--ct-muted);margin-bottom:4px;overflow-wrap:anywhere}
+.ct-tco-mini-value{font-size:16px;font-weight:700;color:var(--ct-ink);overflow-wrap:anywhere}
+@media(max-width:360px){
+  .ct-tco-mini-kpi{padding:8px}
+  .ct-tco-mini-value{font-size:14px}
+}
 .ct-tco-chart-wrap{position:relative;width:100%;height:280px;min-height:280px;min-width:0}
 .ct-tco-chart-wrap canvas{max-width:100%}
 .ct-tco-muted{color:var(--ct-muted);font-size:13px;margin:0}
