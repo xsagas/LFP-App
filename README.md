@@ -2,6 +2,8 @@
 
 PWA de precios Epson LFP con simulador TCO.
 
+PAW para visualizar catalogo de producto y costos unitarios
+
 ## Características
 - Catálogo de impresoras LFP con precios USD/COP.
 - Simulador TCO con desglose por `m²`/`Und`.
