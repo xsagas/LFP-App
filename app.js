@@ -629,21 +629,6 @@
       return tcoLoadPromise;
     }
 
-    function saveTcoScenario(detail){
-      try {
-        const key = 'pl_tco_scenarios_v1';
-        const store = JSON.parse(localStorage.getItem(key) || '{}');
-        const modelId = (detail && detail.parametros && detail.parametros.equipoId) || (tcoInstance && tcoInstance._store && tcoInstance._store.state.equipoId) || 'unknown';
-        if (!store[modelId]) store[modelId] = [];
-        store[modelId].push({ savedAt: new Date().toISOString(), data: detail });
-        localStorage.setItem(key, JSON.stringify(store));
-        const status = stage.querySelector('[data-role="tco-status"]');
-        if (status) status.textContent = 'Escenario guardado en este dispositivo.';
-      } catch(e){
-        console.warn('[TCO] No se pudo guardar el escenario', e);
-      }
-    }
-
     function renderTcoView(modelId, opts){
       destroyTco();
       const model = data.find((m) => m.id === modelId);
@@ -712,7 +697,6 @@
             equipoInicialId: model.id,
             varianteInicialId: selectedVariantId,
             display: { currency, trm: getTrm() },
-            onGuardarEscenario: saveTcoScenario,
             onError: (err) => { console.warn('[TCO]', err); }
           });
         } catch (e) {

@@ -17,7 +17,6 @@
     const host = {
       onCalculado: cfg.onCalculado,
       onPaybackCalculado: cfg.onPaybackCalculado,
-      onGuardarEscenario: cfg.onGuardarEscenario,
       onError: cfg.onError
     };
 

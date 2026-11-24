@@ -96,10 +96,6 @@ const simulador = window.ChannelToolsTCO.mount('#contenedor-simulador', {
   // Callbacks hacia la App Principal
   onCalculado: (evento) => { /* { payload, data, contexto } */ },
   onPaybackCalculado: (evento) => { /* { data } */ },
-  onGuardarEscenario: (escenario) => {
-    // La App Padre abre su propio modal o persiste en su API/LocalStorage
-    // escenario = { parametros: contexto, resultados: data, payback }
-  },
   onError: (error) => { /* { codigo: 422, mensaje: '...' } */ }
 });
 ```
@@ -181,7 +177,6 @@ Cada objeto dentro de `catalogo.equipos` y `catalogo.equiposOtras` debe cumplir 
 Además de los callbacks, el elemento contenedor emite eventos que burbujean (`bubbles: true`):
 * `tco:calculado` — `detail: { payload, data, contexto }`
 * `tco:payback-calculado` — `detail: { data }`
-* `tco:guardar-solicitado` — `detail: { parametros, resultados, payback }`
 * `tco:reset` — Disparado cuando hay un error de validación o se reinicia el formulario.
 
 ---
@@ -277,7 +272,7 @@ El diseño abandona AdminLTE 3 y utiliza componentes nativos de **Bootstrap 5.3+
    * No hay selector de equipo: el simulador carga exclusivamente el equipo que se está revisando (`equipoInicialId`).
    * Selectores en cascada `#ct-sim-variante`, `#ct-sim-modo`, `#ct-sim-papel`.
    * Inputs numéricos con `inputmode="decimal"` y clase `.ct-campo-decimal`: `#ct-sim-metros-mes` y `#ct-sim-horas-dia`.
-   * Botón primario `#ct-btn-calcular` ("Calcular Costo") y botón secundario `#ct-btn-guardar-escenario` (visible tras el primer cálculo exitoso, dispara el evento/callback `onGuardarEscenario`).
+   * Botón primario `#ct-btn-calcular` ("Calcular Costo"). El botón "Guardar escenario" fue retirado.
 3. **Modal “Uso de tinta por color” (`#ct-modal-uso-tinta`)**:
    * Se abre desde el botón editar de la tarjeta KPI y se construye dentro del módulo TCO.
    * Los campos se derivan de `ink_skus` del equipo (colores distintos, en orden de aparición); si no existe, usa `tintas[].color_code`.

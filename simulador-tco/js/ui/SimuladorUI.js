@@ -160,8 +160,6 @@
     const inpHoras = el('input', { id: 'ct-sim-horas-dia', class: 'ct-tco-control ct-campo-decimal', type: 'text', inputmode: 'decimal' });
 
     const btnCalcular = el('button', { id: 'ct-btn-calcular', type: 'submit', class: 'ct-tco-btn ct-tco-btn-primary', text: 'Calcular Costo' });
-    const btnGuardar = el('button', { id: 'ct-btn-guardar-escenario', type: 'button', class: 'ct-tco-btn ct-tco-btn-secondary', text: 'Guardar escenario' });
-    btnGuardar.style.display = 'none';
 
     const grid = el('div', { class: 'ct-tco-form-grid' }, [
       field('Variante / Plan', 'ct-sim-variante', selVariante),
@@ -171,7 +169,7 @@
       field('Horas por día', 'ct-sim-horas-dia', inpHoras)
     ]);
 
-    const actions = el('div', { class: 'ct-tco-actions' }, [btnCalcular, btnGuardar]);
+    const actions = el('div', { class: 'ct-tco-actions' }, [btnCalcular]);
     form.append(grid, actions);
 
     function field(labelText, forId, control) {
@@ -633,7 +631,6 @@
       alert.textContent = message;
       resultados.appendChild(alert);
       paybackCard.classList.add('d-none');
-      btnGuardar.style.display = 'none';
       state.resultados = null; state.payback = null;
       dispatch('tco:reset', {});
       if (host.onError) host.onError({ codigo: 422, mensaje: message });
@@ -695,8 +692,6 @@
         const consumoCard = renderConsumoTinta(eq, ctx.params);
         if (consumoCard) resultados.appendChild(consumoCard);
       }
-
-      btnGuardar.style.display = '';
     }
 
     function getEquipoCapacityMl(eq) {
@@ -836,12 +831,6 @@
     selVariante.addEventListener('change', () => { state.varianteIndex = Number(selVariante.value) || 0; updateKpisForEquipo(store.getEquipoActivo()); });
     selModo.addEventListener('change', () => { state.modoIndex = Number(selModo.value) || 0; updateKpisForEquipo(store.getEquipoActivo()); });
     selPapel.addEventListener('change', () => { state.papelIndex = Number(selPapel.value) || 0; });
-
-    btnGuardar.addEventListener('click', () => {
-      const detalle = { parametros: state.contexto ? state.contexto.params : null, resultados: state.resultados, payback: state.payback };
-      dispatch('tco:guardar-solicitado', detalle);
-      if (host.onGuardarEscenario) host.onGuardarEscenario(detalle);
-    });
 
     function resolveVariantIndex(eq, variantId) {
       if (!eq || !Array.isArray(eq.variantes) || variantId == null) return -1;
