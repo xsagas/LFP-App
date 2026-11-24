@@ -664,24 +664,23 @@
 
       section('Costos Variables (CVU)');
       row('Tinta', data.detalle.tinta_m2);
-      row('Energía', data.detalle.energia_m2);
       row('Sustrato', data.detalle.sustrato_m2);
-      row('Desperdicio sustrato', data.detalle.sustrato_desperdicio_m2);
+      row('Energía', data.detalle.energia_m2);
+      row('Desperdicio Sustrato', data.detalle.sustrato_desperdicio_m2);
+      row('Desperdicio Tinta', data.detalle.desperdicio_tinta_m2);
+      row('Uso de Cabezal', data.detalle.cabezal_m2);
       row('Consumibles', data.detalle.consumibles_m2);
-      row('Cabezal', data.detalle.cabezal_m2);
-      row('Desperdicio tinta', data.detalle.desperdicio_tinta_m2);
-      row('Otro factor', data.detalle.otro_factor_m2);
-      row('Subtotal CVU', data.cvu_m2, 'ct-tco-subtotal');
+      row('Subtotal (CVU)', data.cvu_m2, 'ct-tco-subtotal');
 
       section('Costos Fijos (CFU)');
       row('Mano de obra', data.costos_fijos_mensual.mano_obra / ctx.params.metros_mes);
       row('Arrendamiento', data.costos_fijos_mensual.arrendamiento / ctx.params.metros_mes);
       row('Depreciación', data.costos_fijos_mensual.depreciacion / ctx.params.metros_mes);
-      row('CoverPlus', data.costos_fijos_mensual.coverplus / ctx.params.metros_mes);
-      row('Subtotal CFU', data.costo_fijo_unitario, 'ct-tco-subtotal');
+      row('Servicio Técnico', data.costos_fijos_mensual.coverplus / ctx.params.metros_mes);
+      row('Subtotal (CFU)', data.costo_fijo_unitario, 'ct-tco-subtotal');
 
       tbody.appendChild(el('tr', { class: 'ct-tco-total table-primary fw-bold' }, [
-        el('td', { text: 'Costo Total Unitario (TCO)' }),
+        el('td', { text: 'Costo Total Unitario' }),
         el('td', { text: fmtUnit2(data.tco_total_m2) }),
         el('td', { text: '100,0%' })
       ]));

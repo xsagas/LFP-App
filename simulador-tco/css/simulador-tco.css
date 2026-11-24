@@ -48,6 +48,9 @@
 .ct-tco-table .ct-tco-section-row td{font-weight:700;color:var(--ct-brand);background:var(--ct-accent-soft);border-bottom:1px solid var(--ct-line)}
 .ct-tco-table .ct-tco-subtotal td{font-weight:600}
 .ct-tco-table .ct-tco-total td,.ct-tco-table .table-primary td{font-weight:700;background:var(--ct-accent-softer)}
+/* Desglose de costos: encabezados y contenido de "USD/m²" y "%" centrados. */
+#ct-tabla-desglose th:nth-child(2),#ct-tabla-desglose th:nth-child(3),
+#ct-tabla-desglose td:nth-child(2),#ct-tabla-desglose td:nth-child(3){text-align:center}
 /* En móvil el header "Rendimiento (m²/140ml)" exige menos padding para no forzar scroll interno. */
 @media(max-width:480px){
   .ct-tco-table th,.ct-tco-table td{padding:8px 6px}

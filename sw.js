@@ -2,7 +2,7 @@
  * Estrategia: cache-first para el app shell, con actualización en segundo plano.
  * Los recursos del simulador TCO se cargan bajo demanda y se cachean en runtime.
  */
-const CACHE_NAME = 'pricelist-v29-payback-kpi-center';
+const CACHE_NAME = 'pricelist-v30-desglose-reorder';
 const APP_SHELL = [
   './',
   './index.html',

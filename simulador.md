@@ -281,7 +281,7 @@ El diseño abandona AdminLTE 3 y utiliza componentes nativos de **Bootstrap 5.3+
    * Si el total por color es `0`, el cálculo usa el consumo del modo seleccionado.
 4. **Zona de Resultados (`<div id="ct-resultados" aria-live="polite" aria-atomic="true">`)**:
    * **Alertas de Validación**: Renderizadas mediante `alert alert-danger` usando creación segura de nodos DOM (`textContent`, prevención XSS).
-   * **Tabla de Desglose (`#ct-tabla-desglose`)**: Envuelta en `<div class="table-responsive" role="region" aria-label="Desglose de costos" tabindex="0">`. Usa `table table-sm table-hover align-middle` con encabezados agrupados para **Costos Variables** (Subtotal CVU), **Costos Fijos** (Subtotal CFU) y fila destacada (`table-primary fw-bold`) para **Costo Total Unitario** (`100,0%`).
+   * **Tabla de Desglose (`#ct-tabla-desglose`)**: Envuelta en `<div class="table-responsive" role="region" aria-label="Desglose de costos" tabindex="0">`. Usa `table table-sm table-hover align-middle` con encabezados agrupados para **Costos Variables** (Tinta, Sustrato, Energía, Desperdicio Sustrato, Desperdicio Tinta, Uso de Cabezal, Consumibles → Subtotal (CVU)), **Costos Fijos** (Mano de obra, Arrendamiento, Depreciación, Servicio Técnico → Subtotal (CFU)) y fila destacada (`table-primary fw-bold`) para **Costo Total Unitario** (`100,0%`). Las columnas de valor y porcentaje van centradas.
    * **Tarjeta de Consumo Mensual de Tinta (`#ct-card-consumo-tinta`)**: Visible solo cuando existe uso de tinta por color definido. Muestra tabla con Tinta, Consumo, Rendimiento y Estimado (`Litros/mes`).
 4. **Panel Interactivo de PayBack Descontado (`#ct-card-payback`)**:
    * Inicialmente oculto (`d-none`); se muestra al emitirse `tco:calculado`.
