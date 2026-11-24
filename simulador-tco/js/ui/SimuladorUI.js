@@ -82,11 +82,14 @@
     }
     function fmtMoney(usd, usdDecimals, copDecimals) {
       const d = getDisplay();
+      const curLabel = d.currency === 'COP' ? 'Cop' : 'Usd';
+      return curLabel + ' ' + fmtMoneyNumber(usd, usdDecimals, copDecimals);
+    }
+    function fmtMoneyNumber(usd, usdDecimals, copDecimals) {
+      const d = getDisplay();
       const v = toDisplayAmount(usd);
       const dec = d.currency === 'COP' ? (copDecimals != null ? copDecimals : 2) : (usdDecimals != null ? usdDecimals : 2);
-      const curLabel = d.currency === 'COP' ? 'Cop' : 'Usd';
-      const formatted = FormatoEs.fmtEs(v, dec).replace(/\./g, '');
-      return curLabel + ' ' + formatted;
+      return FormatoEs.fmtEs(v, dec).replace(/\./g, '');
     }
     function fmtMoneyUnit(usd, usdDecimals, copDecimals) {
       const d = getDisplay();
@@ -470,8 +473,9 @@
       controls.append(margenGroup.wrap, tasaGroup.wrap);
 
       const mini = el('div', { class: 'ct-tco-payback-kpis' });
-      const pbInv = miniKpi('Inversión inicial'); const pbVol = miniKpi('Volumen mensual');
+      const pbInv = miniKpi('Inversión (Usd)'); const pbVol = miniKpi('Producción (m²/mes)');
       const pbMargen = miniKpi('Margen (usd/mes)'); const pbRoi = miniKpi('ROI (meses)');
+      pbInv.labelEl = pbInv.card.querySelector('.ct-tco-mini-label');
       pbMargen.labelEl = pbMargen.card.querySelector('.ct-tco-mini-label');
       mini.append(pbInv.card, pbVol.card, pbMargen.card, pbRoi.card);
 
@@ -483,7 +487,7 @@
       paybackCard.append(title, controls, mini, chartWrap);
       paybackCard._margen = margenGroup.input;
       paybackCard._tasa = tasaGroup.input;
-      paybackCard._kpi = { inv: pbInv.value, vol: pbVol.value, margen: pbMargen.value, margenLabel: pbMargen.labelEl, roi: pbRoi.value };
+      paybackCard._kpi = { inv: pbInv.value, invLabel: pbInv.labelEl, vol: pbVol.value, margen: pbMargen.value, margenLabel: pbMargen.labelEl, roi: pbRoi.value };
       paybackCard._canvas = canvas;
       paybackCard._chartDesc = chartDesc;
       paybackCard._chart = createChartManager(canvas, getDisplay);
@@ -784,10 +788,11 @@
       paybackCard.classList.remove('d-none');
       const k = paybackCard._kpi;
       const cur = currencyCode();
+      if (k.invLabel) k.invLabel.textContent = 'Inversión (' + (cur === 'COP' ? 'Cop' : 'Usd') + ')';
       if (k.margenLabel) k.margenLabel.textContent = 'Margen (' + cur.toLowerCase() + '/mes)';
-      k.inv.textContent = fmtMoney(pb.inversion_inicial, 2, 0);
+      k.inv.textContent = fmtMoneyNumber(pb.inversion_inicial, 2, 0);
       k.vol.textContent = FormatoEs.fmtEs(pb.volumen_mensual, 0);
-      k.margen.textContent = fmtMoney(pb.margen_mensual, 2, 0);
+      k.margen.textContent = fmtMoneyNumber(pb.margen_mensual, 2, 0);
       let roi = '—';
       if (pb.payback_descontado != null) roi = String(Math.ceil(pb.payback_descontado));
       else if (pb.payback_descontado_estado) roi = pb.payback_descontado_estado;
