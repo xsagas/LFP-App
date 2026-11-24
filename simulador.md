@@ -285,9 +285,9 @@ El diseño abandona AdminLTE 3 y utiliza componentes nativos de **Bootstrap 5.3+
    * **Tarjeta de Consumo Mensual de Tinta (`#ct-card-consumo-tinta`)**: Visible solo cuando existe uso de tinta por color definido. Muestra tabla con Tinta, Consumo, Rendimiento y Estimado (`Litros/mes`).
 4. **Panel Interactivo de PayBack Descontado (`#ct-card-payback`)**:
    * Inicialmente oculto (`d-none`); se muestra al emitirse `tco:calculado`.
-   * Controles con `input-group` de Bootstrap para **Margen (%)** (default `30`, paso `0,5`, rango `[0, 95]`) y **Tasa Descuento Anual (%)** (default `6,5`, paso `0,5`, rango `[0, 100]`) con botones `-` y `+` accesibles (`aria-label`).
+   * Controles con `input-group` de Bootstrap para **Margen (%)** (default `30`, paso `1`, rango `[0, 95]`) y **Tasa Descuento (%EA)** (default `6,5`, paso `0,5`, rango `[0, 100]`) con botones `-` y `+` accesibles (`aria-label`).
    * Ejecución instantánea en cliente con *debounce* de `350 ms`.
-   * 4 mini-KPIs: Inversión inicial, Volumen mensual, Margen mensual (`USD`) y Retorno ROI (`Math.ceil(meses)` o indicador `"Sin retorno"` / `"> N meses"`).
+   * 4 mini-KPIs en 2×2: Inversión inicial, Volumen mensual, Margen (`usd/mes` o `cop/mes` según la moneda) y ROI (`meses`, solo el número de `Math.ceil(meses)` o el indicador `"Sin retorno"` / `"> N meses"`).
    * Contenedor de gráfico (`<div style="position: relative; height: 280px;">`) con `<canvas id="ct-payback-chart" role="img" aria-label="Evolución del PayBack descontado"></canvas>`.
 
 ### 6.2 Especificación del Gráfico (`ChartManager.js`)

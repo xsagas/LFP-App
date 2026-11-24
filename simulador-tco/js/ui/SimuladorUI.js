@@ -465,13 +465,13 @@
       paybackCard.innerHTML = '';
       const title = el('h3', { class: 'ct-tco-card-title', text: 'PayBack Descontado' });
       const controls = el('div', { class: 'ct-tco-payback-controls' });
-      const margenGroup = inputGroup('Margen (%)', 'ct-pb-margen', '30', '0,5', '0', '95');
-      const tasaGroup = inputGroup('Tasa Descuento Anual (%)', 'ct-pb-tasa', '6,5', '0,5', '0', '100');
+      const margenGroup = inputGroup('Margen (%)', 'ct-pb-margen', '30', '1', '0', '95');
+      const tasaGroup = inputGroup('Tasa Descuento (%EA)', 'ct-pb-tasa', '6,5', '0,5', '0', '100');
       controls.append(margenGroup.wrap, tasaGroup.wrap);
 
       const mini = el('div', { class: 'ct-tco-payback-kpis' });
       const pbInv = miniKpi('Inversión inicial'); const pbVol = miniKpi('Volumen mensual');
-      const pbMargen = miniKpi('Margen mensual'); const pbRoi = miniKpi('Retorno ROI');
+      const pbMargen = miniKpi('Margen (usd/mes)'); const pbRoi = miniKpi('ROI (meses)');
       pbMargen.labelEl = pbMargen.card.querySelector('.ct-tco-mini-label');
       mini.append(pbInv.card, pbVol.card, pbMargen.card, pbRoi.card);
 
@@ -784,12 +784,12 @@
       paybackCard.classList.remove('d-none');
       const k = paybackCard._kpi;
       const cur = currencyCode();
-      if (k.margenLabel) k.margenLabel.textContent = 'Margen mensual (' + cur + ')';
+      if (k.margenLabel) k.margenLabel.textContent = 'Margen (' + cur.toLowerCase() + '/mes)';
       k.inv.textContent = fmtMoney(pb.inversion_inicial, 2, 0);
       k.vol.textContent = FormatoEs.fmtEs(pb.volumen_mensual, 0);
       k.margen.textContent = fmtMoney(pb.margen_mensual, 2, 0);
       let roi = '—';
-      if (pb.payback_descontado != null) roi = Math.ceil(pb.payback_descontado) + ' meses';
+      if (pb.payback_descontado != null) roi = String(Math.ceil(pb.payback_descontado));
       else if (pb.payback_descontado_estado) roi = pb.payback_descontado_estado;
       k.roi.textContent = roi;
       if (paybackCard._chart) paybackCard._chart.render(pb);
