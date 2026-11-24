@@ -260,7 +260,9 @@
 
       const backdrop = el('div', { class: 'ct-tco-modal-backdrop' });
       const overlay = el('div', { class: 'ct-tco-modal', id: 'ct-modal-uso-tinta', hidden: true }, [backdrop, dialog]);
-      container.appendChild(overlay);
+      // Portal a <body>: el overlay queda fuera del contenedor con scroll y de .app,
+      // de modo que position:fixed no depende de ancestros y se puede inertizar el fondo.
+      document.body.appendChild(overlay);
 
       btnClose.addEventListener('click', closeUsoModal);
       btnCancel.addEventListener('click', closeUsoModal);
@@ -348,6 +350,46 @@
 
     let lastFocused = null;
 
+    // ---------------------------------------------------------------------
+    // Bloqueo de scroll del fondo + restauración de posición
+    // ---------------------------------------------------------------------
+    const MODAL_OPEN_CLASS = 'ct-tco-modal-open';
+    let modalScroll = null;
+    let bgLocked = false;
+
+    function scrollHost() {
+      return document.getElementById('stage-scroll')
+        || document.scrollingElement
+        || document.documentElement;
+    }
+
+    function lockBackground() {
+      const host = scrollHost();
+      modalScroll = host ? { top: host.scrollTop, left: host.scrollLeft } : null;
+      document.body.classList.add(MODAL_OPEN_CLASS);
+      const shell = document.querySelector('.app');
+      if (shell) shell.inert = true;
+      bgLocked = true;
+    }
+
+    function unlockBackground(restore) {
+      // No tocar el estado del fondo si el bloqueo lo gestiona otro modal (p. ej. TRM).
+      if (!bgLocked) return;
+      const host = scrollHost();
+      document.body.classList.remove(MODAL_OPEN_CLASS);
+      const shell = document.querySelector('.app');
+      if (shell) shell.inert = false;
+      if (restore && host && modalScroll) {
+        // Safari puede desplazar el contenedor al enfocar un input: se devuelve a su sitio.
+        host.scrollTop = modalScroll.top;
+        host.scrollLeft = modalScroll.left;
+      }
+      modalScroll = null;
+      bgLocked = false;
+      if (document.documentElement.scrollLeft) document.documentElement.scrollLeft = 0;
+      if (document.body && document.body.scrollLeft) document.body.scrollLeft = 0;
+    }
+
     function openUsoModal() {
       const eq = store.getEquipoActivo();
       if (!eq) return;
@@ -356,15 +398,20 @@
       modal.help.textContent = 'Define el uso de tinta por color (' + unit + '). Si el total es 0 se usará el consumo del modo seleccionado.';
       buildUsoRows(eq);
       updateModalTotal();
+      lockBackground();
       modal.overlay.hidden = false;
+      modal.overlay.scrollTop = 0;
       const firstInput = modal.rows.querySelector('input');
-      (firstInput || modal.dialog).focus();
+      const target = firstInput || modal.dialog;
+      // preventScroll: el foco no debe mover el documento ni el contenedor de fondo.
+      try { target.focus({ preventScroll: true }); } catch (e) { target.focus(); }
     }
 
     function closeUsoModal() {
       modal.overlay.hidden = true;
+      unlockBackground(true);
       if (lastFocused && typeof lastFocused.focus === 'function') {
-        try { lastFocused.focus(); } catch (e) {}
+        try { lastFocused.focus({ preventScroll: true }); } catch (e) {}
       }
       lastFocused = null;
     }
@@ -839,7 +886,15 @@
     }
 
     function destroy() {
-      if (paybackCard._chart) paybackCard._chart.destroy();
+      if (paybackCard._chart) {
+        try { paybackCard._chart.destroy(); } catch (e) {}
+      }
+      // El overlay vive en <body>: hay que retirarlo explícitamente al destruir la vista.
+      if (modal && modal.overlay && modal.overlay.parentNode) {
+        modal.overlay.hidden = true;
+        modal.overlay.parentNode.removeChild(modal.overlay);
+      }
+      unlockBackground(false);
       container.innerHTML = '';
       container.classList.remove('ct-tco');
     }

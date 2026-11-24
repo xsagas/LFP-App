@@ -46,6 +46,10 @@
     function render(payback) {
       if (!canvas || typeof Chart === 'undefined') return;
       destroy();
+      // Chart.js deja width/height inline en píxeles. Si no se limpian, ese ancho se
+      // convierte en el min-content del contenedor y la columna del grid no puede reducirse.
+      canvas.style.width = '';
+      canvas.style.height = '';
       const d = currentDisplay();
       const serie = payback && payback.serie ? payback.serie : { meses: [], simple: [], descontado: [] };
       const labels = serie.meses || [];
@@ -131,9 +135,18 @@
           }
         }
       });
+      // Re-medición diferida: el contenedor pudo cambiar de ancho al mostrarse la tarjeta.
+      if (typeof requestAnimationFrame === 'function') {
+        requestAnimationFrame(() => { try { chart.resize(); } catch (e) {} });
+      }
     }
 
-    return { render, destroy };
+    function resize() {
+      if (!chart) return;
+      try { chart.resize(); } catch (e) {}
+    }
+
+    return { render, destroy, resize };
   }
 
   global.CTTCO = global.CTTCO || {};
